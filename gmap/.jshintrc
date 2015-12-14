@@ -1,0 +1,16 @@
+{
+  "indent": 2,
+  "undef": true,
+  "quotmark": "single",
+  "maxlen": 80,
+  "trailing": true,
+  "curly": true,
+  "globalstrict": false,
+  "globals": {
+    "angular": true,
+    "console": true,
+    "Image": true,
+    "window": true
+    "_": true
+  }
+}

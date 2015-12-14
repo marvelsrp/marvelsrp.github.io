@@ -1,0 +1,26 @@
+{
+  "name": "Natinal trust",
+  "version": "0.0.1",
+  "private": true,
+  "authors": [
+    "mbugay <mbugay@justcoded.com>"
+  ],
+  "keywords": [
+    "justcoded",
+    "national",
+    "trust"
+  ],
+  "license": "MIT",
+  "homepage": "http://justcoded.com",
+  "dependencies": {
+    "angular": "~1.4.4",
+    "angular-touch": "~1.4.4",
+    "angular-animate": "~1.4.4",
+    "angular-sanitize": "~1.4.4",
+    "angular-mocks": "~1.4.7",
+    "underscore": "~1.8",
+    "bootstrap-sass": "~3.3.5",
+    "font-awesome": "*",
+    "animate.css-scss": "~3.1.0"
+  }
+}
