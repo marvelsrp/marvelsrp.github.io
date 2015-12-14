@@ -7,11 +7,9 @@
  *
  * @requires $scope
  * */
-angular.module('app.navigateCtrl', [
-  'app.gmap'
-]).controller('navigateCtrl', function($scope){
+angular.module('app.navigateCtrl', []).controller('navigateCtrl', function($scope){
   console.log('init navigateCtrl');
-  $scope.from = 'Chicaho';
+  $scope.from = 'Chicago';
   $scope.to = 'Indianopolis';
 
   var directionsDisplay = new google.maps.DirectionsRenderer({
