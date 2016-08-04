@@ -1,5 +1,4 @@
-.idea/encodings.xml
-.idea/marvelsrp.github.io.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/workspace.xml
+# IDE #
+.idea/
+*.swp
+npm-debug.log
