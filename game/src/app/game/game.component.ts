@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { AppState } from '../app.service';
 import { Router } from '@angular/router';
+import { Hero } from './hero';
 
 @Component({
   selector: 'game',  // <game></game>
@@ -11,10 +12,15 @@ import { Router } from '@angular/router';
 })
 export class Game {
   localState = { nickname: '' };
+  hero: Hero;
+
   constructor(public appState: AppState,  private router: Router) {
-    let hasNickname = this.appState.has('nickname');
-    if (!hasNickname) {
-      this.router.navigate([''])
+
+    let nickname = this.appState.get('nickname');
+    if (typeof nickname === "string") {
+      this.hero = new Hero(nickname);
+    } else {
+      this.router.navigate(['']);
     }
   }
 
