@@ -1,6 +1,7 @@
 import { WebpackAsyncRoute } from '@angularclass/webpack-toolkit';
 import { RouterConfig } from '@angular/router';
 import { Home } from './home';
+import { Game } from './game';
 import { NoContent } from './no-content';
 
 import { DataResolver } from './app.resolver';
@@ -8,6 +9,7 @@ import { DataResolver } from './app.resolver';
 export const routes: RouterConfig = [
   { path: '',      component: Home },
   { path: 'home',  component: Home },
+  { path: 'game',  component: Game },
   // make sure you match the component type string to the require in asyncRoutes
   { path: 'about', component: 'About',
     resolve: {
@@ -28,6 +30,7 @@ export const routes: RouterConfig = [
 
 export const asyncRoutes: AsyncRoutes = {
   // we have to use the alternative syntax for es6-promise-loader to grab the routes
+  // 'Game': require('es6-promise-loader!./game'),
   'About': require('es6-promise-loader!./about'),
   'Detail': require('es6-promise-loader!./+detail'),
   'Index': require('es6-promise-loader!./+detail'), // must be exported with detail/index.ts
@@ -39,6 +42,7 @@ export const asyncRoutes: AsyncRoutes = {
 export const prefetchRouteCallbacks: Array<IdleCallbacks> = [
   asyncRoutes['About'],
   asyncRoutes['Detail'],
+  // asyncRoutes['Game'],
    // es6-promise-loader returns a function
 ];
 
