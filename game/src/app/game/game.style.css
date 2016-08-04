@@ -1,1 +1,13 @@
 /*styles for game content only*/
+
+#canvas{
+  border: 1px solid blue;
+}
+#state{
+  float: left;
+  width: 40%;
+}
+#render{
+  float: left;
+  width: 60%;
+}

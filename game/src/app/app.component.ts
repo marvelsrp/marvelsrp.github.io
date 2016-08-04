@@ -16,19 +16,11 @@ import { AppState } from './app.service';
     './app.style.css'
   ],
   template: `
-    <nav>
-      <span>
-        <a [routerLink]=" ['./'] ">
-          Main
-        </a>
-      </span>
-    </nav>
-
     <main>
       <router-outlet></router-outlet>
     </main>
 
-    <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
+    <!--<pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>-->
   `
 })
 export class App {

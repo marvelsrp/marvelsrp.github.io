@@ -15,6 +15,9 @@ export class Game {
   hero: Hero;
 
   constructor(public appState: AppState,  private router: Router) {
+    //debug
+    this.appState.set('nickname', 'test');
+
 
     let nickname = this.appState.get('nickname');
     if (typeof nickname === "string") {
