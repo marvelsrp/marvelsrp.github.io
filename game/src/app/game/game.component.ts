@@ -1,40 +1,39 @@
-import { Component } from '@angular/core';
+import {Component, Input, ViewChild, ElementRef,} from '@angular/core';
 
 import { AppState } from '../app.service';
 import { Router } from '@angular/router';
-import { Hero } from './hero';
+import { Player } from './entities/player';
 
 @Component({
-  selector: 'game',  // <game></game>
-  pipes: [ ],
+  selector: 'game',
   styleUrls: [ './game.style.css' ],
   templateUrl: './game.template.html'
 })
-export class Game {
-  localState = { nickname: '' };
-  hero: Hero;
 
-  constructor(public appState: AppState,  private router: Router) {
+export class Game {
+  @ViewChild("gameCanvas") gameCanvas: ElementRef;
+  localState = { nickname: '' };
+  player: Player;
+
+  constructor(public element: ElementRef, private router: Router, public appState: AppState,  ) {
+
     //debug
     this.appState.set('nickname', 'test');
 
 
     let nickname = this.appState.get('nickname');
     if (typeof nickname === "string") {
-      this.hero = new Hero(nickname);
+      this.player = new Player(nickname);
     } else {
       this.router.navigate(['']);
     }
   }
 
-  ngOnInit() {
-    console.log('hello `Game` component');
-    // this.title.getData().subscribe(data => this.data = data);
-  }
+  ngAfterViewInit() { // wait for the view to init before using the element
 
-  submitState(value) {
-    this.appState.set('value', value);
-    this.localState.nickname = '';
+    let context: CanvasRenderingContext2D = this.gameCanvas.nativeElement.getContext("2d");
+    // happy drawing from here on
+    context.fillStyle = 'blue';
+    context.fillRect(10, 10, 150, 150);
   }
-
 }

@@ -1,4 +1,4 @@
-export class Hero {
+export class Player {
   private nickname: string;
   private position: [number, number];
 
