@@ -67,9 +67,7 @@ export class World {
     World.creatures.forEach((creature) => creature.process());
   }
 
-  public static eatFood(creature: Creature, food: Food) {
-    console.log('eatFood', creature);
-    creature.experience += food.experience;
+  public static eatFood(food: Food) {
     food.location = World.getRandomCoord();
   }
 }

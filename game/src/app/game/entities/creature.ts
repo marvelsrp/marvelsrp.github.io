@@ -14,7 +14,7 @@ export class Creature {
   private maxforce: number = .1;
   public color: string = '#990000';
   public bgcolor: string = '#FAC6C6';
-  public experience = 10;
+  public experience = 0;
   public static counter = 0;
   public id;
   public targetFood: Food;
@@ -29,7 +29,8 @@ export class Creature {
     if (this.targetFood) {
       let distance = this.location.dist(this.targetFood.location);
       if (distance < Food.size * 2){
-        World.eatFood(this, this.targetFood);
+        this.experience += this.targetFood.experience;
+        World.eatFood(this.targetFood);
         this.targetFood = null;
       }
     } else {
@@ -97,20 +98,6 @@ export class Creature {
     context.moveTo(this.location.x, this.location.y);
     context.lineTo(viewX, viewY);
     context.stroke();
-
-    //look range
-    context.globalAlpha = 0.3;
-    context.moveTo(this.location.x, this.location.y);
-
-  // context.fill();
-    context.closePath();
-    context.stroke();
-
-    context.beginPath();
-    context.arc(this.location.x, this.location.y, this.length*5, 0, 2 * Math.PI, false);
-   // context.fill();
-    context.stroke();
-    context.closePath();
 
 
     context.globalAlpha = 1;
