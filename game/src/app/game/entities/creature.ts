@@ -13,8 +13,8 @@ export class Creature {
   public length = this.mass * 10;
   private maxspeed: number = 5;
   private maxforce: number = .1;
-  public color: string = '#000066';
-  public bgcolor: string = '#E6E6FA';
+  public color: string = '#990000';
+  public bgcolor: string = '#FAC6C6';
 
   constructor(coord: Vector){
     this.location = coord;

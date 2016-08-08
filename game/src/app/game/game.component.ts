@@ -28,9 +28,7 @@ export class Game {
     if (typeof nickname !== "string") {
       return this.router.navigate(['']);
     }
-    // console.log('ngAfterViewInit', );
     let context = this.gameCanvas.nativeElement.getContext("2d");
-    console.log('ngAfterViewInit', context);
     Game.world = new World(context, nickname);
 
     this.loop();
