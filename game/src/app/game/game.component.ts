@@ -40,7 +40,7 @@ export class Game {
 
   loop() {
     Game.world.draw();
-    World.player.controlV1(this.keyPress);
+    World.player.controlV2(this.keyPress);
     World.player.draw();
 
     setTimeout(() => {

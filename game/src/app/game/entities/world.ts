@@ -13,14 +13,16 @@ export class World {
   private static countFoodsTriangle: number = 15;
   private static countFoodsSquare: number = 10;
 
-  public static width: number;
-  public static height: number;
+  public static clientWidth: number;
+  public static clientHeight: number;
+  public static width: number = 10000;
+  public static height: number = 10000;
   public static player:Player;
 
   constructor(context: CanvasRenderingContext2D, nickname: string) {
     World.context = context;
-    World.width = context.canvas.clientWidth;
-    World.height = context.canvas.clientHeight;
+    World.clientWidth = context.canvas.clientWidth;
+    World.clientHeight = context.canvas.clientHeight;
 
     for (let i = 0; i < World.countCreatures; i++)
     {
@@ -50,14 +52,14 @@ export class World {
   }
 
   public static getRandomCoord(){
-    let x = Math.random() * World.width;
-    let y = Math.random() * World.height;
+    let x = Math.random() * World.clientWidth;
+    let y = Math.random() * World.clientHeight;
     return new Vector(x, y);
   }
 
   public draw(){
     World.context.fillStyle="#ffffff";
-    World.context.fillRect(0, 0, World.width, World.height);
+    World.context.fillRect(0, 0, World.clientWidth, World.clientHeight);
 
     World.foods.forEach((goal) => {
       goal.draw();

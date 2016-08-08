@@ -10,6 +10,7 @@ export class Player {
   public static nickname: string;
   public static location: Vector;
   public static velocity: Vector = new Vector(0, 0);
+  public static rotation: Vector = new Vector(0, 0);
   public static acceleration: Vector = new Vector(0, 0);
   public static lookRange: number = 20;
   public static lookDistance: number = 150;
@@ -24,6 +25,7 @@ export class Player {
     Player.nickname = nickname;
     Player.location = coord;
     Player.velocity.random();
+    Player.rotation.random();
   }
 
   controlV1(keyPress){
@@ -73,6 +75,29 @@ export class Player {
     this.applyForce(force);
   }
 
+  controlV2(keyPress){
+    var force = new Vector(0,0);
+
+    if (keyPress[KEYS.LEFT]) {
+      Player.rotation.rotate(Vector.inRadAngle(-10));
+    }
+    //
+    if (keyPress[KEYS.UP]) {
+      Player.velocity.add(Player.rotation);
+    } else {
+      // Player.velocity.random();
+    }
+
+    if (keyPress[KEYS.RIGHT]) {
+      Player.rotation.rotate(Vector.inRadAngle(10));
+    }
+    //
+    if (keyPress[KEYS.DOWN]) {
+      Player.velocity.sub(Player.rotation);
+    }
+    // this.applyForce(force);
+  }
+
   moveTo(target: Vector) {
     var force = new Vector(0,0);
     var cohesion = this.seek(target);
@@ -87,7 +112,7 @@ export class Player {
 
     var context = World.context;
 
-    var angle = Player.velocity.angle();
+    var angle = Player.rotation.angle();
 
     var viewX = Player.location.x + Math.cos(angle) * 40;
     var viewY = Player.location.y + Math.sin(angle) * 40;
@@ -132,8 +157,8 @@ export class Player {
     this.boundaries();
     Player.velocity.add(Player.acceleration);
     Player.velocity.limit(Player.maxspeed);
-    if(Player.velocity.mag() < 1.5)
-      Player.velocity.setMag(1.5);
+    // if(Player.velocity.mag() < 1.5)
+    //   Player.velocity.setMag(1.5);
     Player.location.add(Player.velocity);
     Player.acceleration.mul(0);
   }
