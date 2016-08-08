@@ -1,6 +1,11 @@
 import { Vector } from './vector';
 import { World } from './world';
-
+const KEYS = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40
+}
 export class Player {
   public static nickname: string;
   public static location: Vector;
@@ -27,7 +32,7 @@ export class Player {
     var gradAngle = Vector.inGradAngle(Player.velocity.angle());
 
     switch (true){
-      case keyPress[37]://left
+      case keyPress[KEYS.LEFT]://left
         if (gradAngle  == 0) {
           console.log('fake left');
           target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
@@ -36,7 +41,7 @@ export class Player {
           target = new Vector(Player.location.x - 1, Player.location.y);
         }
         break;
-      case keyPress[38]://top
+      case keyPress[KEYS.UP]://top
         if (gradAngle == 90) {
           console.log('fake top');
           target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
@@ -45,7 +50,7 @@ export class Player {
           target = new Vector(Player.location.x, Player.location.y - 1);
         }
         break;
-      case keyPress[39]://right
+      case keyPress[KEYS.RIGHT]://right
         if (gradAngle == 180) {
           console.log('fake right');
           target = new Vector(Player.location.x + 1, Player.location.y - 1); //fake
@@ -55,7 +60,7 @@ export class Player {
         }
 
         break;
-      case keyPress[40]://bottom
+      case keyPress[KEYS.DOWN]://bottom
         if (gradAngle  == -90) {
           console.log('fake bottom');
           target = new Vector(Player.location.x - 1, Player.location.y + 1);//fake
