@@ -5,7 +5,8 @@ const KEYS = {
   UP: 38,
   RIGHT: 39,
   DOWN: 40
-}
+};
+
 export class Player {
   public static nickname: string;
   public static location: Vector;
@@ -24,7 +25,6 @@ export class Player {
   constructor(nickname: string, coord: Vector){
     Player.nickname = nickname;
     Player.location = coord;
-    Player.velocity.random();
     Player.rotation.random();
   }
 

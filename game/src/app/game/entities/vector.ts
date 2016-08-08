@@ -123,7 +123,7 @@ export class Vector {
     return val * Math.PI / 180;
   }
 
-  static getAngleBeetween(velocity_2, position1, position2){
+  static getAngleBeetween(velocity_2:Vector, position1:Vector, position2:Vector){
       var angle = Vector.inGradAngle(Math.atan2(velocity_2.y, velocity_2.x));
       var angle2 = Vector.inGradAngle(
           Math.atan2(

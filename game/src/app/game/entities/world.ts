@@ -64,11 +64,12 @@ export class World {
     World.foods.forEach((goal) => {
       goal.draw();
     });
-    World.creatures.forEach((creature) => {
-      let target = World.getRandomCoord();
-      creature.moveTo(target);
-      creature.draw();
-    });
+    World.creatures.forEach((creature) => creature.process());
+  }
 
+  public static eatFood(creature: Creature, food: Food) {
+    console.log('eatFood', creature);
+    creature.experience += food.experience;
+    food.location = World.getRandomCoord();
   }
 }
