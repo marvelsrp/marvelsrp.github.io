@@ -31,51 +31,46 @@ export class Player {
     var target;
     var gradAngle = Vector.inGradAngle(Player.velocity.angle());
 
-    switch (true){
-      case keyPress[KEYS.LEFT]://left
-        if (gradAngle  == 0) {
-          console.log('fake left');
-          target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
-        } else {
-          console.log('real left', gradAngle);
-          target = new Vector(Player.location.x - 1, Player.location.y);
-        }
-        break;
-      case keyPress[KEYS.UP]://top
-        if (gradAngle == 90) {
-          console.log('fake top');
-          target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
-        } else {
-          console.log('real top', gradAngle);
-          target = new Vector(Player.location.x, Player.location.y - 1);
-        }
-        break;
-      case keyPress[KEYS.RIGHT]://right
-        if (gradAngle == 180) {
-          console.log('fake right');
-          target = new Vector(Player.location.x + 1, Player.location.y - 1); //fake
-        } else {
-          console.log('real right', gradAngle);
-          target = new Vector(Player.location.x + 1, Player.location.y);
-        }
-
-        break;
-      case keyPress[KEYS.DOWN]://bottom
-        if (gradAngle  == -90) {
-          console.log('fake bottom');
-          target = new Vector(Player.location.x - 1, Player.location.y + 1);//fake
-        } else {
-          console.log('real bottom', gradAngle);
-          target = new Vector(Player.location.x, Player.location.y + 1);
-        }
-
-        break;
-    }
-    if (target){
+    if (keyPress[KEYS.LEFT]) {
+      if (gradAngle  == 0) {
+        target = new Vector(Player.location.x - 10, Player.location.y - 10);//fake
+      } else {
+        target = new Vector(Player.location.x - 1, Player.location.y);
+      }
       var cohesion = this.seek(target);
       force.add(cohesion);
-      this.applyForce(force);
     }
+
+    if (keyPress[KEYS.UP]) {
+      if (gradAngle == 90) {
+        target = new Vector(Player.location.x - 10, Player.location.y - 10);//fake
+      } else {
+        target = new Vector(Player.location.x, Player.location.y - 1);
+      }
+      var cohesion = this.seek(target);
+      force.add(cohesion);
+    }
+
+    if (keyPress[KEYS.RIGHT]) {
+      if (gradAngle == 180) {
+        target = new Vector(Player.location.x + 10, Player.location.y - 10); //fake
+      } else {
+        target = new Vector(Player.location.x + 1, Player.location.y);
+      }
+      var cohesion = this.seek(target);
+      force.add(cohesion);
+    }
+
+    if (keyPress[KEYS.DOWN]) {
+      if (gradAngle == -90) {
+        target = new Vector(Player.location.x - 10, Player.location.y + 10);//fake
+      } else {
+        target = new Vector(Player.location.x, Player.location.y + 1);
+      }
+      var cohesion = this.seek(target);
+      force.add(cohesion);
+    }
+    this.applyForce(force);
   }
 
   moveTo(target: Vector) {
@@ -148,16 +143,16 @@ export class Player {
   }
 
   boundaries() {
-    if (Player.location.x < 15)
+    if (Player.location.x < 50)
       this.applyForce(new Vector(Player.maxforce * 2, 0));
 
-    if (Player.location.x > World.width - 15)
+    if (Player.location.x > World.width - 50)
       this.applyForce(new Vector(-Player.maxforce * 2, 0));
 
-    if (Player.location.y < 15)
+    if (Player.location.y < 50)
       this.applyForce(new Vector(0, Player.maxforce * 2));
 
-    if (Player.location.y > World.height - 15)
+    if (Player.location.y > World.height - 50)
       this.applyForce(new Vector(0, -Player.maxforce * 2));
 
   }
