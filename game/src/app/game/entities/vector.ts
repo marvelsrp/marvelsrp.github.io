@@ -124,8 +124,8 @@ export class Vector {
   }
 
   static getAngleBeetween(velocity_2, position1, position2){
-      var angle = inGradAngle(Math.atan2(velocity_2.y, velocity_2.x));
-      var angle2 = inGradAngle(
+      var angle = Vector.inGradAngle(Math.atan2(velocity_2.y, velocity_2.x));
+      var angle2 = Vector.inGradAngle(
           Math.atan2(
             position1.x - position2.x,
             position1.y - position2.y
