@@ -14,19 +14,69 @@ export class Player {
   public static color: string = '#0066FA';
   public static bgcolor: string = '#00CCFA';
 
+
   constructor(nickname: string, coord: Vector){
     Player.nickname = nickname;
     Player.location = coord;
     Player.velocity.random();
   }
 
+  controlV1(keyPress){
+    var force = new Vector(0,0);
+    var target;
+    var gradAngle = Vector.inGradAngle(Player.velocity.angle());
+
+    switch (true){
+      case keyPress[37]://left
+        if (gradAngle  == 0) {
+          console.log('fake left');
+          target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
+        } else {
+          console.log('real left', gradAngle);
+          target = new Vector(Player.location.x - 1, Player.location.y);
+        }
+        break;
+      case keyPress[38]://top
+        if (gradAngle == 90) {
+          console.log('fake top');
+          target = new Vector(Player.location.x - 1, Player.location.y - 1);//fake
+        } else {
+          console.log('real top', gradAngle);
+          target = new Vector(Player.location.x, Player.location.y - 1);
+        }
+        break;
+      case keyPress[39]://right
+        if (gradAngle == 180) {
+          console.log('fake right');
+          target = new Vector(Player.location.x + 1, Player.location.y - 1); //fake
+        } else {
+          console.log('real right', gradAngle);
+          target = new Vector(Player.location.x + 1, Player.location.y);
+        }
+
+        break;
+      case keyPress[40]://bottom
+        if (gradAngle  == -90) {
+          console.log('fake bottom');
+          target = new Vector(Player.location.x - 1, Player.location.y + 1);//fake
+        } else {
+          console.log('real bottom', gradAngle);
+          target = new Vector(Player.location.x, Player.location.y + 1);
+        }
+
+        break;
+    }
+    if (target){
+      var cohesion = this.seek(target);
+      force.add(cohesion);
+      this.applyForce(force);
+    }
+  }
+
   moveTo(target: Vector) {
     var force = new Vector(0,0);
-
-    var separation = this.separate(World.creatures);
     var cohesion = this.seek(target);
 
-    force.add(separation);
     force.add(cohesion);
 
     this.applyForce(force);
@@ -114,36 +164,5 @@ export class Player {
     seek.sub(Player.velocity).limit(0.3);
 
     return seek;
-  }
-
-  separate(neighbors) {
-    var sum = new Vector(0,0);
-    var count = 1;
-
-    for (var i in neighbors)
-    {
-      if (neighbors[i] != this)
-      {
-        var d = Player.location.dist(neighbors[i].location);
-        if (d < Player.lookDistance/2 && d > 0)
-        {
-          var diff = Player.location.copy().sub(neighbors[i].location);
-          diff.normalize();
-          diff.div(d);
-          sum.add(diff);
-          count++;
-        }
-      }
-    }
-    if (!count)
-      return sum;
-
-    sum.div(count);
-    sum.normalize();
-    sum.mul(Player.maxspeed);
-    sum.sub(Player.velocity);
-    sum.limit(Player.maxforce);
-
-    return sum.mul(2);
   }
 }

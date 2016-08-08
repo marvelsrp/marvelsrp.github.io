@@ -68,9 +68,5 @@ export class World {
       creature.draw();
     });
 
-    let target = World.getRandomCoord();
-    World.player.moveTo(target);
-    World.player.draw();
-
   }
 }
