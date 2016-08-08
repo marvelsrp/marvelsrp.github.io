@@ -1,6 +1,5 @@
 import { Vector } from './vector';
 import { World } from './world';
-// let world:World = World.getInstance();
 
 export class Creature {
   public type: string;
@@ -16,10 +15,8 @@ export class Creature {
   private maxforce: number = .1;
   public color: string = '#000066';
   public bgcolor: string = '#E6E6FA';
-  private _world:World;
 
-  constructor(world:World, coord: Vector){
-    this._world = world;
+  constructor(coord: Vector){
     this.location = coord;
     this.velocity.random();
   }
@@ -27,7 +24,7 @@ export class Creature {
   moveTo(target: Vector) {
     var force = new Vector(0,0);
 
-    var separation = this.separate(this._world.creatures);
+    var separation = this.separate(World.creatures);
     var cohesion = this.seek(target);
 
     force.add(separation);
@@ -39,7 +36,7 @@ export class Creature {
   draw() {
     this.update();
 
-      var context = this._world.context;
+      var context = World.context;
 
       var angle = this.velocity.angle();
 
@@ -100,13 +97,13 @@ export class Creature {
       if (this.location.x < 15)
           this.applyForce(new Vector(this.maxforce * 2, 0));
 
-      if (this.location.x > this._world.width - 15)
+      if (this.location.x > World.width - 15)
           this.applyForce(new Vector(-this.maxforce * 2, 0));
 
       if (this.location.y < 15)
           this.applyForce(new Vector(0, this.maxforce * 2));
 
-      if (this.location.y > this._world.height - 15)
+      if (this.location.y > World.height - 15)
           this.applyForce(new Vector(0, -this.maxforce * 2));
 
     }

@@ -1,23 +1,19 @@
 import { Vector } from './vector';
 import { World } from './world';
-console.log('food World',World );
-let world:World = World.getInstance();
 //
 export class Food {
   public type: string;
   public location: Vector;
   public mass: number = 1;
   public length = this.mass * 10;
-  private _world:World;
 
-  constructor(world:World, type: string, coord:Vector){
-    this._world = world;;
+  constructor(type: string, coord:Vector){
     this.type = type;
     this.location = coord;
   }
 
   draw() {
-    var context = world.context;
+    var context = World.context;
 
     context.save();
     context.beginPath();

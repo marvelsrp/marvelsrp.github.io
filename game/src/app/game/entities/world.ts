@@ -1,79 +1,73 @@
 import { Vector } from './vector';
 import { Creature } from './creature';
 import { Food } from './food';
+import { Player } from './player';
 
 export class World {
-  private static _instance:World;
-  public creatures: Array<Creature> = [];
-  public foods: Array<Food> = [];
-  public context: CanvasRenderingContext2D;
-  private countCreatures: number = 3;
-  private countFoodsCircle: number = 20;
-  private countFoodsTriangle: number = 15;
-  private countFoodsSquare: number = 10;
-  public width = 1000;
-  public height = 1000;
+  public static creatures: Array<Creature> = [];
+  public static foods: Array<Food> = [];
+  public static context: CanvasRenderingContext2D;
 
-  // constructor(){
-  //   return World._instance;
-  // }
+  private static countCreatures: number = 3;
+  private static countFoodsCircle: number = 20;
+  private static countFoodsTriangle: number = 15;
+  private static countFoodsSquare: number = 10;
 
-  public static getInstance():World
-  {
-    if (!World._instance){
-      World._instance = new World();
+  public static width: number;
+  public static height: number;
+  public static player:Player;
+
+  constructor(context: CanvasRenderingContext2D, nickname: string) {
+    World.context = context;
+    World.width = context.canvas.clientWidth;
+    World.height = context.canvas.clientHeight;
+
+    for (let i = 0; i < World.countCreatures; i++)
+    {
+      let creature = new Creature(World.getRandomCoord());
+      World.creatures.push(creature);
     }
-    console.log('World::getInstance', World._instance);
-    return World._instance;
+
+    for (let i = 0; i < World.countFoodsCircle; i++)
+    {
+      let circle = new Food('circle', World.getRandomCoord());
+      World.foods.push(circle);
+    }
+
+    for (let i = 0; i < World.countFoodsTriangle; i++)
+    {
+      let triangle = new Food('triangle', World.getRandomCoord());
+      World.foods.push(triangle);
+    }
+
+    for (let i = 0; i < World.countFoodsSquare; i++)
+    {
+      let square = new Food('square', World.getRandomCoord());
+      World.foods.push(square);
+    }
+
+    World.player = new Player(nickname, World.getRandomCoord());
   }
-  public getRandomCoord(){
-    let x = Math.random() * this.context.canvas.clientWidth;
-    let y = Math.random() * this.context.canvas.clientHeight;
+
+  public static getRandomCoord(){
+    let x = Math.random() * World.width;
+    let y = Math.random() * World.height;
     return new Vector(x, y);
   }
 
-  public init() {
-    for (let i = 0; i < this.countCreatures; i++)
-    {
-      let creature = new Creature(this, this.getRandomCoord());
-      this.creatures.push(creature);
-    }
-
-    for (let i = 0; i < this.countFoodsCircle; i++)
-    {
-      let circle = new Food(this, 'circle', this.getRandomCoord());
-      this.foods.push(circle);
-    }
-
-    for (let i = 0; i < this.countFoodsTriangle; i++)
-    {
-      let triangle = new Food(this, 'triangle', this.getRandomCoord());
-      this.foods.push(triangle);
-    }
-
-    for (let i = 0; i < this.countFoodsSquare; i++)
-    {
-      let square = new Food(this, 'square', this.getRandomCoord());
-      this.foods.push(square);
-    }
-
-
-  }
-
   public draw(){
-    this.context.fillStyle="#ffffff";
-    this.context.fillRect(0, 0, this.context.canvas.clientWidth, this.context.canvas.clientHeight);
+    World.context.fillStyle="#ffffff";
+    World.context.fillRect(0, 0, World.width, World.height);
 
-    this.foods.forEach((goal) => {
+    World.foods.forEach((goal) => {
       goal.draw();
     });
-    this.creatures.forEach((creature) => {
-      let x = Math.random() * this.context.canvas.clientWidth;
-      let y = Math.random() * this.context.canvas.clientHeight;
-      let target = new Vector(x,y);
+    World.creatures.forEach((creature) => {
+      let target = World.getRandomCoord();
       creature.moveTo(target);
       creature.draw();
     });
+    World.player.draw();
 
   }
 }
