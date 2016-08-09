@@ -13,7 +13,6 @@ export class World {
   public static clientHeight: number;
   public static width: number = 10000;
   public static height: number = 10000;
-  public static player:Creature;
 
   public static init() {
     Creature.active = Creature.add(true);
