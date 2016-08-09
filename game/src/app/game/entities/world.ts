@@ -1,18 +1,13 @@
 import { Vector } from './vector';
 import { Creature } from './creature';
 import { Food } from './food';
-import { Patron } from './patron';
+
 
 export class World {
-  public static creatures: Array<Creature> = [];
-  public static foods: Array<Food> = [];
-  public static patrons: Array<Patron> = [];
   public static context: CanvasRenderingContext2D;
 
-  private static countCreatures: number = 1;
-  private static countFoodsCircle: number = 20;
-  private static countFoodsTriangle: number = 15;
-  private static countFoodsSquare: number = 10;
+  private static countCreatures: number = 3;
+  private static countFoods: number = 30;
 
   public static clientWidth: number;
   public static clientHeight: number;
@@ -20,36 +15,20 @@ export class World {
   public static height: number = 10000;
   public static player:Creature;
 
-  constructor(context: CanvasRenderingContext2D, nickname: string) {
+  public static init() {
+    Creature.active = Creature.add(true);
+
+    for (let i = 0; i < World.countCreatures; i++)
+      Creature.add();
+
+    for (let i = 0; i < World.countFoods; i++)
+      Food.add()
+  }
+
+  public static setContext(context: CanvasRenderingContext2D){
     World.context = context;
     World.clientWidth = context.canvas.clientWidth;
     World.clientHeight = context.canvas.clientHeight;
-
-    for (let i = 0; i < World.countCreatures; i++)
-    {
-      let creature = new Creature(World.getRandomCoord());
-      World.creatures.push(creature);
-    }
-
-    for (let i = 0; i < World.countFoodsCircle; i++)
-    {
-      let circle = new Food('circle', World.getRandomCoord());
-      World.foods.push(circle);
-    }
-
-    for (let i = 0; i < World.countFoodsTriangle; i++)
-    {
-      let triangle = new Food('triangle', World.getRandomCoord());
-      World.foods.push(triangle);
-    }
-
-    for (let i = 0; i < World.countFoodsSquare; i++)
-    {
-      let square = new Food('square', World.getRandomCoord());
-      World.foods.push(square);
-    }
-
-    World.player = new Creature(World.getRandomCoord(), nickname);
   }
 
   public static getRandomCoord(){
@@ -58,14 +37,13 @@ export class World {
     return new Vector(x, y);
   }
 
-  public draw(){
+  public static draw(){
     World.context.fillStyle="#ffffff";
     World.context.fillRect(0, 0, World.clientWidth, World.clientHeight);
 
-    World.foods.forEach((goal) => {
-      goal.draw();
-    });
-    World.creatures.forEach((creature) => creature.process());
+    Food.list.forEach((food) => food.draw());
+    Creature.list.forEach((creature) => creature.process());
+
 
     World.context.font="20px Tahome";
     World.context.fillStyle = 'black';
@@ -74,15 +52,11 @@ export class World {
 
   }
 
-  public static eatFood(food: Food) {
-    food.location = World.getRandomCoord();
-  }
 
-  public static fire(owner){
-    let patron = new Patron(owner);
-  }
-
-  public static removePatron(patron: Patron){
-
-  }
+  // public static getNearly(pos: Vector){
+  //   let foods = World.foods.filter((food) => {
+  //     let distance = pos.dist(food.location);
+  //     return (distance < Food.size + this.mass);
+  //   });
+  // }
 }

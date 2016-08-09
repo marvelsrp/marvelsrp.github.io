@@ -1,4 +1,4 @@
-import {Component, ViewChild, ElementRef} from '@angular/core';
+import {Component, ViewChild, ElementRef, Input} from '@angular/core';
 import {AppState} from '../app.service';
 import {Router} from '@angular/router';
 import {Creature, World} from './entities';
@@ -15,13 +15,14 @@ import {Creature, World} from './entities';
 
 export class Game {
   @ViewChild("gameCanvas") gameCanvas:ElementRef;
-  player:Creature;
+
   static context:CanvasRenderingContext2D;
-  static world:World;
+
+  // public creatures:Array<Creature> = World.creatures;
   private fps = 30;
   public keyPress:{ [key:number]:boolean; } = {};
-  constructor(public element:ElementRef, private router:Router, public appState:AppState,) {
 
+  constructor(public element:ElementRef, private router:Router, public appState:AppState,) {
     //debug
     this.appState.set('nickname', 'test');
   }
@@ -33,15 +34,16 @@ export class Game {
       return this.router.navigate(['']);
     }
     let context = this.gameCanvas.nativeElement.getContext("2d");
-    Game.world = new World(context, nickname);
+    World.setContext(context);
+
+    World.init();
 
     this.loop();
   }
 
   loop() {
-    Game.world.draw();
-    World.player.control(this.keyPress);
-    World.player.process();
+    Creature.active.control(this.keyPress);
+    World.draw();
 
     setTimeout(() => {
       this.loop();

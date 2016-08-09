@@ -1,6 +1,7 @@
 import { Vector } from './vector';
 import { Creature } from './creature';
 import { World } from './world';
+import { Food } from './food';
 
 export class Patron {
   public type: string;
@@ -19,13 +20,27 @@ export class Patron {
     this.owner = owner;
     this.id = Patron.counter;
     this.location = owner.location.copy();
-    this.velocity = owner.velocity.copy();
+    let velocity = owner.rotation.copy();
+    let vAngle = velocity.angle() + Math.random() * 0.3;
+    velocity.setAngle(vAngle);
+    this.velocity = velocity;
     this.velocity.limit(this.maxspeed);
-    this.velocity.setMag(1.5);
+    this.velocity.setMag(10);
 
   }
 
   public process() {
+    //Перебор по всем целям, расчет вхождения
+    let eating = Food.list.filter((food) => {
+      let distance = this.location.dist(food.location);
+      return (distance < food.size + this.mass);
+    });
+    eating.forEach((food) => {
+      this.owner.experience += food.experience;
+      Food.kill(food);
+      this.owner.removePatron(this);
+    });
+
     this.draw();
   }
 
@@ -42,11 +57,6 @@ export class Patron {
 
     var context = World.context;
 
-    var angle = this.velocity.angle();
-
-    var viewX = this.location.x + Math.cos(angle) * 40;
-    var viewY = this.location.y + Math.sin(angle) * 40;
-
     context.save();
     context.beginPath();
 
@@ -55,13 +65,10 @@ export class Patron {
     context.strokeStyle = this.color;
 
     //bot
-    context.arc(this.location.x, this.location.y, 10, 0, 2 * Math.PI, false);
+    context.arc(this.location.x, this.location.y, 2, 0, 2 * Math.PI, false);
     context.fill();
 
     //move vector
-    context.moveTo(this.location.x, this.location.y);
-    context.lineTo(viewX, viewY);
-    context.stroke();
 
 
     context.globalAlpha = 1;
@@ -80,7 +87,7 @@ export class Patron {
       this.location.y < 0 ||
       this.location.y > World.height
     ) {
-      World.removePatron(this);
+      this.owner.removePatron(this);
     }
 
   }
