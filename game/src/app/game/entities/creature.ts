@@ -94,6 +94,7 @@ export class Creature {
       if (distance < this.targetFood.size * 2){
         this.experience += this.targetFood.experience;
         Food.kill(this.targetFood);
+        Food.add();
       }
     } else {
       this._findTarget();
