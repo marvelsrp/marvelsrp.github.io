@@ -1,14 +1,15 @@
 import { Vector } from './vector';
 import { Creature } from './creature';
 import { Food } from './food';
-import { Player } from './player';
+import { Patron } from './patron';
 
 export class World {
   public static creatures: Array<Creature> = [];
   public static foods: Array<Food> = [];
+  public static patrons: Array<Patron> = [];
   public static context: CanvasRenderingContext2D;
 
-  private static countCreatures: number = 3;
+  private static countCreatures: number = 1;
   private static countFoodsCircle: number = 20;
   private static countFoodsTriangle: number = 15;
   private static countFoodsSquare: number = 10;
@@ -17,7 +18,7 @@ export class World {
   public static clientHeight: number;
   public static width: number = 10000;
   public static height: number = 10000;
-  public static player:Player;
+  public static player:Creature;
 
   constructor(context: CanvasRenderingContext2D, nickname: string) {
     World.context = context;
@@ -48,7 +49,7 @@ export class World {
       World.foods.push(square);
     }
 
-    World.player = new Player(nickname, World.getRandomCoord());
+    World.player = new Creature(World.getRandomCoord(), nickname);
   }
 
   public static getRandomCoord(){
@@ -65,9 +66,23 @@ export class World {
       goal.draw();
     });
     World.creatures.forEach((creature) => creature.process());
+
+    World.context.font="20px Tahome";
+    World.context.fillStyle = 'black';
+    World.context.fillText("Expirience: " + Creature.active.experience, 20, 20);
+    World.context.fillText("Level: " + Creature.active.level, 20, 40);
+
   }
 
   public static eatFood(food: Food) {
     food.location = World.getRandomCoord();
+  }
+
+  public static fire(owner){
+    let patron = new Patron(owner);
+  }
+
+  public static removePatron(patron: Patron){
+
   }
 }

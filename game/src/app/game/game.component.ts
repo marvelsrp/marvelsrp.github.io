@@ -1,7 +1,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {AppState} from '../app.service';
 import {Router} from '@angular/router';
-import {Player, World} from './entities';
+import {Creature, World} from './entities';
 
 @Component({
   selector: 'game',
@@ -15,7 +15,7 @@ import {Player, World} from './entities';
 
 export class Game {
   @ViewChild("gameCanvas") gameCanvas:ElementRef;
-  player:Player;
+  player:Creature;
   static context:CanvasRenderingContext2D;
   static world:World;
   private fps = 30;
@@ -40,7 +40,8 @@ export class Game {
 
   loop() {
     Game.world.draw();
-    World.player.process(this.keyPress);
+    World.player.control(this.keyPress);
+    World.player.process();
 
     setTimeout(() => {
       this.loop();
