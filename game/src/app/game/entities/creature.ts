@@ -283,17 +283,17 @@ export class Creature {
   }
 
   private _boundaries() {
-    if (this.physics.location.x < 50)
-      this._applyForce(new Vector(this.physics.maxforce * 2, 0));
+    if (this.physics.location.x < 0)
+      this._applyForce(new Vector(this.physics.maxspeed, 0));
 
-    if (this.physics.location.x > World.width - 50)
-      this._applyForce(new Vector(-this.physics.maxforce * 2, 0));
+    if (this.physics.location.x > World.canvasWidth)
+      this._applyForce(new Vector(-this.physics.maxspeed, 0));
 
-    if (this.physics.location.y < 50)
-      this._applyForce(new Vector(0, this.physics.maxforce * 2));
+    if (this.physics.location.y < 0)
+      this._applyForce(new Vector(0, this.physics.maxspeed));
 
-    if (this.physics.location.y > World.height - 50)
-      this._applyForce(new Vector(0, -this.physics.maxforce * 2));
+    if (this.physics.location.y > World.canvasHeight)
+      this._applyForce(new Vector(0, -this.physics.maxspeed));
 
   }
 

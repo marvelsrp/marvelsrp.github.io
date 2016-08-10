@@ -21,6 +21,8 @@ export class Game {
   // public creatures:Array<Creature> = World.creatures;
   private fps = 30;
   public keyPress:{ [key:number]:boolean; } = {};
+  public canvasWidth: number = World.canvasWidth;
+  public canvasHeight: number = World.canvasHeight;
 
   constructor(public element:ElementRef, private router:Router, public appState:AppState,) {
     //debug
