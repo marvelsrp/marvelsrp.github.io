@@ -6,7 +6,7 @@ import { Food } from './food';
 export class World {
   public static context: CanvasRenderingContext2D;
 
-  private static countCreatures: number = 3;
+  private static countCreatures: number = 30;
   private static countFoods: number = 30;
 
   public static clientWidth: number;

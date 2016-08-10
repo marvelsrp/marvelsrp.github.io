@@ -31,12 +31,17 @@ export class Creature {
   };
   public experience = 0;
   public level = 1;
+  public health = 100;
+  public maxHealth = 100;
+  public patronInterval = 1/5;
+
   public isPlayer: boolean;
   public isBot: boolean;
-  public static counter = 0;
   public targetFood: Food;
   public patrons: Array<Patron> = [];
   public id;
+  public static counter = 0;
+  public static maxLevel = 20;
 
   constructor(coord: Vector, isPlayer: boolean = false){
     Creature.counter++;
@@ -46,6 +51,15 @@ export class Creature {
     this.physics.rotation.random();
     this.isPlayer = isPlayer;
     this.isBot = !isPlayer;
+  }
+
+  public damage(damage:number){
+    this.health -= damage;
+    let killed = this.health <= 0;
+    if (killed) {
+      Creature.kill(this);
+    }
+    return killed;
   }
 
   public static add(isPlayer:boolean = false){
@@ -70,8 +84,39 @@ export class Creature {
       this._processBot();
     }
 
+   this._processDamage();
+
     this._checkLevel();
     this._draw();
+  }
+
+  private _processDamage(){
+    //Перебор по всем сущностям, нанесение урона при таране
+    let damageCreatures = Creature.list.filter((creature) => {
+      let distance = this.physics.location.dist(creature.physics.location);
+      let minDistance = creature.physics.mass * 10 + this.physics.mass * 10;
+      return (distance < minDistance && this.id != creature.id);
+    });
+
+    damageCreatures.forEach((creature) => {
+      var diff = this.physics.location.copy().sub(creature.physics.location);
+      diff.normalize();
+      diff.mul(3);
+      this._applyForce(diff);
+
+      this.damage(Math.round(creature.physics.mass * 10  + Math.random() * 5));
+    });
+  }
+
+  private _fire(){
+    this.patrons.push(new Patron(this));
+  }
+
+  public removePatron(patron: Patron){
+    let index = this.patrons.findIndex((item) => {
+      return patron.id === item.id;
+    });
+    this.patrons.splice(index, 1);
   }
 
   private _processPlayer(){
@@ -154,7 +199,7 @@ export class Creature {
     }
 
     if (keyPress[KEYS.SPACE]) {
-      this.fire();
+      this._fire();
     }
   }
 
@@ -171,6 +216,14 @@ export class Creature {
     this._update();
     let bgcolor = '#00CCFA';
     let color = '#0066FA';
+    let percentHealth = this.health / this.maxHealth;
+    if (percentHealth < 0.3){
+      bgcolor = '#CC6666';
+      color = '#333333';
+    } else if (percentHealth < 0.6){
+      bgcolor = '#ffcc66';
+      color = '#cc8800';
+    }
 
     var context = World.context;
 
@@ -200,12 +253,17 @@ export class Creature {
     context.stroke();
 
     context.globalAlpha = 1;
+    context.font="14px Tahome";
+    context.fillStyle = 'black';
+    let x = this.physics.location.x + this.physics.mass * 10 + 10;
+    let y = this.physics.location.y + this.physics.mass * 10 + 10;
     if (this.isBot){
-      World.context.fillText("Bot " + this.level + " level", this.physics.location.x + this.physics.mass * 10 + 10, this.physics.location.y + this.physics.mass * 10 + 10);
+      World.context.fillText("Bot " + this.level + " level", x, y);
     }
     if (this.isPlayer){
-      World.context.fillText("Player", this.physics.location.x +  this.physics.mass * 10 + 10, this.physics.location.y + this.physics.mass * 10 + 10);
+      World.context.fillText("Player", x, y);
     }
+    World.context.fillText("Health: " + this.health + '/' + this.maxHealth, x, y + 14);
 
     context.restore() ;
   }
@@ -248,21 +306,14 @@ export class Creature {
     return seek;
   }
 
-  public fire(){
-    this.patrons.push(new Patron(this));
-  }
 
-  public removePatron(patron: Patron){
-    let index = this.patrons.findIndex((item) => {
-      return patron.id === item.id;
-    });
-    this.patrons.splice(index, 1);
-  }
 
   private _checkLevel(){
     let limit = 100;
-    if (this.experience >= limit) {
+    if (this.experience >= limit && this.level < Creature.maxLevel) {
       this.level++;
+      this.health += Math.round(this.level/3 * 20);
+      this.maxHealth += Math.round(this.level/3 * 20);
       this.experience = 0;
       this.physics.mass += 0.3;
     }

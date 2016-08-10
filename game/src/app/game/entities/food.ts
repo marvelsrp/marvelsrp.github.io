@@ -28,9 +28,9 @@ export class Food {
     };
     this.experience = EXP[type];
     let SIZES = {
-      'circle': 20,
-      'triangle': 15,
-      'square': 10
+      'circle': 6,
+      'triangle': 6,
+      'square': 8
     };
     this.physics.size = SIZES[type];
   }
@@ -78,22 +78,22 @@ export class Food {
 
     switch(this.type){
       case 'circle':
-        context.fillStyle = '#ff5c33';
-        context.strokeStyle = '#ffffff';
+        context.fillStyle = '#CCCCCC';
+        context.strokeStyle = '#000000';
         context.arc(this.physics.location.x, this.physics.location.y, this.physics.size, 0, 2 * Math.PI, false);
         break;
       case 'triangle':
-        context.fillStyle = '#006600';
-        context.strokeStyle = '#ffffff';
+        context.fillStyle = '#CCCCCC';
+        context.strokeStyle = '#000000';
 
         context.moveTo(this.physics.location.x , this.physics.location.y - this.physics.size);
         context.lineTo(this.physics.location.x - this.physics.size, this.physics.location.y + this.physics.size);
         context.lineTo(this.physics.location.x + this.physics.size, this.physics.location.y + this.physics.size);
         break;
       case 'square':
-        context.fillStyle = '#0066cc';
-        context.strokeStyle = '#ffffff';
-        context.fillRect(this.physics.location.x - this.physics.size, this.physics.location.y - this.physics.size, this.physics.size * 2, this.physics.size * 2);
+        context.fillStyle = '#CCCCCC';
+        context.strokeStyle = '#000000';
+        context.rect(this.physics.location.x - this.physics.size, this.physics.location.y - this.physics.size, this.physics.size * 2, this.physics.size * 2);
         break;
     }
     //bot

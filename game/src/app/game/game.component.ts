@@ -38,17 +38,25 @@ export class Game {
 
     World.init();
 
-    this.loop();
+    let then = Date.now();
+    this.animate(then);
   }
 
-  loop() {
-    Creature.active.control(this.keyPress);
-    World.draw();
+  animate(then) {
+    let fpsInterval = 1000 / this.fps;
+    requestAnimationFrame(() => {
+      this.animate(then);
+    });
 
-    setTimeout(() => {
-      this.loop();
-    }, 1000 / this.fps);
-  };
+    let now = Date.now();
+    let elapsed = now - then;
+
+    if (elapsed > fpsInterval) {
+      then = now - (elapsed % fpsInterval);
+      Creature.active.control(this.keyPress);
+      World.draw();
+    }
+  }
 
   private _keydown(event:KeyboardEvent) {
     this.keyPress[event.keyCode] = true;
