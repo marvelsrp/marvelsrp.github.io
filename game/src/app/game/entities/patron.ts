@@ -5,12 +5,14 @@ import { Food } from './food';
 
 export class Patron {
   public type: string;
-  public location: Vector;
-  public velocity: Vector;
-  public mass: number = 1;
-  private maxspeed: number = 10;
-  public color: string = '#990000';
-  public bgcolor: string = '#FAC6C6';
+  public physics = {
+    location:  new Vector(0, 0),
+    velocity:  new Vector(0, 0),
+    mass: 1,
+    maxspeed: 10,
+    size: 700
+  };
+
   public static counter = 0;
   public id;
   public owner:Creature;
@@ -19,21 +21,21 @@ export class Patron {
     Patron.counter++;
     this.owner = owner;
     this.id = Patron.counter;
-    this.location = owner.location.copy();
-    let velocity = owner.rotation.copy();
+    this.physics.location = owner.physics.location.copy();
+    let velocity = owner.physics.rotation.copy();
     let vAngle = velocity.angle() + Math.random() * 0.3;
     velocity.setAngle(vAngle);
-    this.velocity = velocity;
-    this.velocity.limit(this.maxspeed);
-    this.velocity.setMag(10);
+    this.physics.velocity = velocity;
+    this.physics.velocity.limit(this.physics.maxspeed);
+    this.physics.velocity.setMag(10);
 
   }
 
   public process() {
     //Перебор по всем целям, расчет вхождения
     let eating = Food.list.filter((food) => {
-      let distance = this.location.dist(food.location);
-      return (distance < food.size + this.mass);
+      let distance = this.physics.location.dist(food.physics.location);
+      return (distance < food.physics.size + this.physics.mass * 10);
     });
     eating.forEach((food) => {
       this.owner.experience += food.experience;
@@ -44,28 +46,23 @@ export class Patron {
     this.draw();
   }
 
-  public moveTo(target: Vector) {
-    var force = new Vector(0,0);
-    var cohesion = this._seek(target);
-
-    force.add(cohesion);
-    this.velocity.add(force);
-  }
-
   public draw() {
     this._update();
+
+    let color = '#990000';
+    let bgcolor = '#FAC6C6';
 
     var context = World.context;
 
     context.save();
     context.beginPath();
 
-    context.fillStyle = this.bgcolor;
+    context.fillStyle = bgcolor;
     context.lineWidth = 1;
-    context.strokeStyle = this.color;
+    context.strokeStyle = color;
 
     //bot
-    context.arc(this.location.x, this.location.y, 2, 0, 2 * Math.PI, false);
+    context.arc(this.physics.location.x, this.physics.location.y, 2, 0, 2 * Math.PI, false);
     context.fill();
 
     //move vector
@@ -76,16 +73,16 @@ export class Patron {
   }
 
   private _update() {
-    this.location.add(this.velocity);
+    this.physics.location.add(this.physics.velocity);
     this._checkOut();
   }
 
   private _checkOut() {
     if (
-      this.location.x < 0 ||
-      this.location.x > World.width ||
-      this.location.y < 0 ||
-      this.location.y > World.height
+      this.physics.location.x < 0 ||
+      this.physics.location.x > World.width ||
+      this.physics.location.y < 0 ||
+      this.physics.location.y > World.height
     ) {
       this.owner.removePatron(this);
     }
@@ -93,10 +90,10 @@ export class Patron {
   }
 
   private _seek(target) {
-    var seek = target.copy().sub(this.location);
+    var seek = target.copy().sub(this.physics.location);
     seek.normalize();
-    seek.mul(this.maxspeed);
-    seek.sub(this.velocity).limit(0.3);
+    seek.mul(this.physics.maxspeed);
+    seek.sub(this.physics.velocity).limit(0.3);
 
     return seek;
   }

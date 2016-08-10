@@ -5,10 +5,12 @@ import { World } from './world';
 export class Food {
   public static list: Array<Food> = [];
 
+  public physics = {
+    location:  new Vector(0, 0),
+    mass: 1,
+    size: 700
+  };
   public type: string;
-  public location: Vector;
-  public mass: number = 1;
-  public size = 10;
   public experience = 10;
   public static counter = 0;
   public creaturesTargeting: Array<Creature> = [];
@@ -18,7 +20,7 @@ export class Food {
     Food.counter++;
     this.id = Food.counter;
     this.type = type;
-    this.location = coord;
+    this.physics.location = coord;
     let EXP = {
       'circle': 30,
       'triangle': 10,
@@ -30,7 +32,7 @@ export class Food {
       'triangle': 15,
       'square': 10
     };
-    this.size = SIZES[type];
+    this.physics.size = SIZES[type];
   }
 
   public static add(){
@@ -78,20 +80,20 @@ export class Food {
       case 'circle':
         context.fillStyle = '#ff5c33';
         context.strokeStyle = '#ffffff';
-        context.arc(this.location.x, this.location.y, this.size, 0, 2 * Math.PI, false);
+        context.arc(this.physics.location.x, this.physics.location.y, this.physics.size, 0, 2 * Math.PI, false);
         break;
       case 'triangle':
         context.fillStyle = '#006600';
         context.strokeStyle = '#ffffff';
 
-        context.moveTo(this.location.x , this.location.y - this.size);
-        context.lineTo(this.location.x - this.size, this.location.y + this.size);
-        context.lineTo(this.location.x + this.size, this.location.y + this.size);
+        context.moveTo(this.physics.location.x , this.physics.location.y - this.physics.size);
+        context.lineTo(this.physics.location.x - this.physics.size, this.physics.location.y + this.physics.size);
+        context.lineTo(this.physics.location.x + this.physics.size, this.physics.location.y + this.physics.size);
         break;
       case 'square':
         context.fillStyle = '#0066cc';
         context.strokeStyle = '#ffffff';
-        context.fillRect(this.location.x - this.size, this.location.y - this.size, this.size * 2, this.size * 2);
+        context.fillRect(this.physics.location.x - this.physics.size, this.physics.location.y - this.physics.size, this.physics.size * 2, this.physics.size * 2);
         break;
     }
     //bot

@@ -19,16 +19,16 @@ export class Creature {
   public static list: Array<Creature> = [];
   public static active: Creature;
   public name: string;
-  public location: Vector;
-  public velocity: Vector = new Vector(0, 0);
-  public rotation: Vector = new Vector(0, 0);
-  public acceleration: Vector = new Vector(0, 0);
-  public mass: number = 1;
-  private maxspeed: number = 5;
-  private maxforce: number = .1;
-  public lookRange = 700;
-  public color: string = '#0066FA';
-  public bgcolor: string = '#00CCFA';
+  public physics = {
+    location:  new Vector(0, 0),
+    velocity: new Vector(0, 0),
+    rotation: new Vector(0, 0),
+    acceleration: new Vector(0, 0),
+    mass: 1,
+    maxspeed: 5,
+    maxforce: 0.1,
+    lookRange: 700
+  };
   public experience = 0;
   public level = 1;
   public isPlayer: boolean;
@@ -42,8 +42,8 @@ export class Creature {
     Creature.counter++;
     this.id = Creature.counter;
     this.name = "bot-" + this.id;
-    this.location = coord;
-    this.rotation.random();
+    this.physics.location = coord;
+    this.physics.rotation.random();
     this.isPlayer = isPlayer;
     this.isBot = !isPlayer;
   }
@@ -77,8 +77,8 @@ export class Creature {
   private _processPlayer(){
     //Перебор по всем целям, расчет вхождения
     let eating = Food.list.filter((food) => {
-      let distance = this.location.dist(food.location);
-      return (distance < food.size + this.mass * 10);
+      let distance = this.physics.location.dist(food.physics.location);
+      return (distance < food.physics.size + this.physics.mass * 10);
     });
 
     eating.forEach((food) => {
@@ -90,8 +90,8 @@ export class Creature {
 
   private _processBot(){
     if (this.targetFood) {
-      let distance = this.location.dist(this.targetFood.location);
-      if (distance < this.targetFood.size * 2){
+      let distance = this.physics.location.dist(this.targetFood.physics.location);
+      if (distance < this.targetFood.physics.size * 2){
         this.experience += this.targetFood.experience;
         Food.kill(this.targetFood);
         Food.add();
@@ -101,7 +101,7 @@ export class Creature {
     }
 
     if (this.targetFood){
-      let coord = this.targetFood.location;
+      let coord = this.targetFood.physics.location;
       this._moveTo(coord);
     } else {
       this._moveTo(World.getRandomCoord());
@@ -113,13 +113,13 @@ export class Creature {
 
     //Перебор по всем целям, расчет вхождения
     let looked = Food.list.filter((food) => {
-      let distance = this.location.dist(food.location);
-      return (distance < this.lookRange);
+      let distance = this.physics.location.dist(food.physics.location);
+      return (distance < this.physics.lookRange);
     });
     if (looked.length) {
       let sortLooked = looked.sort((a, b) => {
-        let aDist = this.location.dist(a.location);
-        let bDist = this.location.dist(b.location);
+        let aDist = this.physics.location.dist(a.physics.location);
+        let bDist = this.physics.location.dist(b.physics.location);
         return aDist - bDist;
       });
       this.targetFood = sortLooked[0];
@@ -129,19 +129,19 @@ export class Creature {
 
   public control(keyPress:{ [key:number]:boolean; } ){
     if (keyPress[KEYS.LEFT] || keyPress[KEYS.A]) {
-      this.rotation.rotate(Vector.inRadAngle(-10));
+      this.physics.rotation.rotate(Vector.inRadAngle(-10));
     }
 
     if (keyPress[KEYS.UP]  || keyPress[KEYS.W]) {
-      this.velocity.add(this.rotation);
+      this.physics.velocity.add(this.physics.rotation);
     }
 
     if (keyPress[KEYS.RIGHT]  || keyPress[KEYS.D]) {
-      this.rotation.rotate(Vector.inRadAngle(10));
+      this.physics.rotation.rotate(Vector.inRadAngle(10));
     }
 
     if (keyPress[KEYS.DOWN]  || keyPress[KEYS.S]) {
-      this.velocity.sub(this.rotation);
+      this.physics.velocity.sub(this.physics.rotation);
     }
 
     if (//default speed
@@ -150,7 +150,7 @@ export class Creature {
       !keyPress[KEYS.RIGHT] && !keyPress[KEYS.D] &&
       !keyPress[KEYS.DOWN] && !keyPress[KEYS.S])
     {
-      this.velocity.setMag(0.5);
+      this.physics.velocity.setMag(0.5);
     }
 
     if (keyPress[KEYS.SPACE]) {
@@ -169,27 +169,29 @@ export class Creature {
 
   private _draw() {
     this._update();
+    let bgcolor = '#00CCFA';
+    let color = '#0066FA';
 
     var context = World.context;
 
-    var angle = this.rotation.angle();
+    var angle = this.physics.rotation.angle();
 
-    var viewX = this.location.x + Math.cos(angle) * this.mass * 11;
-    var viewY = this.location.y + Math.sin(angle) * this.mass * 11;
+    var viewX = this.physics.location.x + Math.cos(angle) * this.physics.mass * 11;
+    var viewY = this.physics.location.y + Math.sin(angle) * this.physics.mass * 11;
 
     context.save();
     context.beginPath();
 
-    context.fillStyle = this.bgcolor;
+    context.fillStyle = bgcolor;
     context.lineWidth = 1;
-    context.strokeStyle = this.color;
+    context.strokeStyle = color;
 
     //bot
-    context.arc(this.location.x, this.location.y, this.mass * 10, 0, 2 * Math.PI, false);
+    context.arc(this.physics.location.x, this.physics.location.y, this.physics.mass * 10, 0, 2 * Math.PI, false);
     context.fill();
 
     //move vector
-    context.moveTo(this.location.x, this.location.y);
+    context.moveTo(this.physics.location.x, this.physics.location.y);
     context.lineTo(viewX, viewY);
     context.stroke();
 
@@ -199,10 +201,10 @@ export class Creature {
 
     context.globalAlpha = 1;
     if (this.isBot){
-      World.context.fillText("Bot " + this.level + " level", this.location.x + this.mass * 10 + 10, this.location.y + this.mass * 10 + 10);
+      World.context.fillText("Bot " + this.level + " level", this.physics.location.x + this.physics.mass * 10 + 10, this.physics.location.y + this.physics.mass * 10 + 10);
     }
     if (this.isPlayer){
-      World.context.fillText("Player", this.location.x +  this.mass * 10 + 10, this.location.y + this.mass * 10 + 10);
+      World.context.fillText("Player", this.physics.location.x +  this.physics.mass * 10 + 10, this.physics.location.y + this.physics.mass * 10 + 10);
     }
 
     context.restore() ;
@@ -210,38 +212,38 @@ export class Creature {
 
   private _update() {
     this._boundaries();
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.maxspeed);
+    this.physics.velocity.add(this.physics.acceleration);
+    this.physics.velocity.limit(this.physics.maxspeed);
 
-    this.location.add(this.velocity);
-    this.acceleration.mul(0);
+    this.physics.location.add(this.physics.velocity);
+    this.physics.acceleration.mul(0);
   }
 
   private _applyForce(force) {
-    this.acceleration.add(force);
-    this.rotation = this.velocity;
+    this.physics.acceleration.add(force);
+    this.physics.rotation = this.physics.velocity;
   }
 
   private _boundaries() {
-    if (this.location.x < 50)
-      this._applyForce(new Vector(this.maxforce * 2, 0));
+    if (this.physics.location.x < 50)
+      this._applyForce(new Vector(this.physics.maxforce * 2, 0));
 
-    if (this.location.x > World.width - 50)
-      this._applyForce(new Vector(-this.maxforce * 2, 0));
+    if (this.physics.location.x > World.width - 50)
+      this._applyForce(new Vector(-this.physics.maxforce * 2, 0));
 
-    if (this.location.y < 50)
-      this._applyForce(new Vector(0, this.maxforce * 2));
+    if (this.physics.location.y < 50)
+      this._applyForce(new Vector(0, this.physics.maxforce * 2));
 
-    if (this.location.y > World.height - 50)
-      this._applyForce(new Vector(0, -this.maxforce * 2));
+    if (this.physics.location.y > World.height - 50)
+      this._applyForce(new Vector(0, -this.physics.maxforce * 2));
 
   }
 
   private _seek(target) {
-    var seek = target.copy().sub(this.location);
+    var seek = target.copy().sub(this.physics.location);
     seek.normalize();
-    seek.mul(this.maxspeed);
-    seek.sub(this.velocity).limit(0.3);
+    seek.mul(this.physics.maxspeed);
+    seek.sub(this.physics.velocity).limit(0.3);
 
     return seek;
   }
@@ -262,7 +264,7 @@ export class Creature {
     if (this.experience >= limit) {
       this.level++;
       this.experience = 0;
-      this.mass += 0.3;
+      this.physics.mass += 0.3;
     }
   }
 }
