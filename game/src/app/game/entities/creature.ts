@@ -63,7 +63,9 @@ export class Creature {
   }
 
   public static add(isPlayer:boolean = false){
-    let creature = new Creature(World.getRandomCoord(), isPlayer);
+    let coord = (isPlayer) ? new Vector(World.width / 2, World.height / 2) : World.getRandomCoord();
+
+    let creature = new Creature(coord, isPlayer);
     Creature.list.push(creature);
     return creature;
   }
@@ -131,6 +133,19 @@ export class Creature {
       Food.kill(food);
       Food.add();
     });
+    //
+    // if(this.physics.location.x - World.width/2 < 0){
+    //   this.physics.location.x = World.width/2;
+    // }
+    // if(this.physics.location.y - World.height/2 < 0){
+    //   this.physics.location.y = World.height/2;
+    // }
+    // if(this.physics.location.x + this.physics.mass * 10 / 2 > World.width){
+    //   this.physics.location.x = World.width - this.width/2;
+    // }
+    // if(this.physics.location.y + this.physics.mass * 10 / 2 > World.height){
+    //   this.physics.location.y = World.height - this.height/2;
+    // }
   }
 
   private _processBot(){
@@ -240,12 +255,12 @@ export class Creature {
     context.strokeStyle = color;
 
     //bot
-    context.arc(this.physics.location.x, this.physics.location.y, this.physics.mass * 10, 0, 2 * Math.PI, false);
+    context.arc(World.convertX(this.physics.location.x), World.convertY(this.physics.location.y), this.physics.mass * 10, 0, 2 * Math.PI, false);
     context.fill();
 
     //move vector
-    context.moveTo(this.physics.location.x, this.physics.location.y);
-    context.lineTo(viewX, viewY);
+    context.moveTo(World.convertX(this.physics.location.x), World.convertY(this.physics.location.y));
+    context.lineTo(World.convertX(viewX), World.convertY(viewY));
     context.stroke();
 
     // context.fill();
@@ -255,8 +270,8 @@ export class Creature {
     context.globalAlpha = 1;
     context.font="14px Tahome";
     context.fillStyle = 'black';
-    let x = this.physics.location.x + this.physics.mass * 10 + 10;
-    let y = this.physics.location.y + this.physics.mass * 10 + 10;
+    let x = World.convertX(this.physics.location.x + this.physics.mass * 10 + 10);
+    let y = World.convertY(this.physics.location.y + this.physics.mass * 10 + 10);
     if (this.isBot){
       World.context.fillText("Bot " + this.level + " level", x, y);
     }
@@ -286,13 +301,13 @@ export class Creature {
     if (this.physics.location.x < 0)
       this._applyForce(new Vector(this.physics.maxspeed, 0));
 
-    if (this.physics.location.x > World.canvasWidth)
+    if (this.physics.location.x > World.width)
       this._applyForce(new Vector(-this.physics.maxspeed, 0));
 
     if (this.physics.location.y < 0)
       this._applyForce(new Vector(0, this.physics.maxspeed));
 
-    if (this.physics.location.y > World.canvasHeight)
+    if (this.physics.location.y > World.height)
       this._applyForce(new Vector(0, -this.physics.maxspeed));
 
   }

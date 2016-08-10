@@ -80,20 +80,20 @@ export class Food {
       case 'circle':
         context.fillStyle = '#CCCCCC';
         context.strokeStyle = '#000000';
-        context.arc(this.physics.location.x, this.physics.location.y, this.physics.size, 0, 2 * Math.PI, false);
+        context.arc(World.convertX(this.physics.location.x), World.convertY(this.physics.location.y), this.physics.size, 0, 2 * Math.PI, false);
         break;
       case 'triangle':
         context.fillStyle = '#CCCCCC';
         context.strokeStyle = '#000000';
 
-        context.moveTo(this.physics.location.x , this.physics.location.y - this.physics.size);
-        context.lineTo(this.physics.location.x - this.physics.size, this.physics.location.y + this.physics.size);
-        context.lineTo(this.physics.location.x + this.physics.size, this.physics.location.y + this.physics.size);
+        context.moveTo(World.convertX(this.physics.location.x), World.convertY(this.physics.location.y - this.physics.size));
+        context.lineTo(World.convertX(this.physics.location.x - this.physics.size), World.convertY(this.physics.location.y + this.physics.size));
+        context.lineTo(World.convertX(this.physics.location.x + this.physics.size), World.convertY(this.physics.location.y + this.physics.size));
         break;
       case 'square':
         context.fillStyle = '#CCCCCC';
         context.strokeStyle = '#000000';
-        context.rect(this.physics.location.x - this.physics.size, this.physics.location.y - this.physics.size, this.physics.size * 2, this.physics.size * 2);
+        context.rect(World.convertX(this.physics.location.x - this.physics.size) , World.convertY(this.physics.location.y - this.physics.size), this.physics.size * 2, this.physics.size * 2);
         break;
     }
     //bot

@@ -56,6 +56,7 @@ export class Game {
     if (elapsed > fpsInterval) {
       then = now - (elapsed % fpsInterval);
       Creature.active.control(this.keyPress);
+      World.camera.update();
       World.draw();
     }
   }
