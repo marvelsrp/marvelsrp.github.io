@@ -3,20 +3,49 @@
 <head>
     <meta charset="utf-8"/>
     <style>
+        html,body,div{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
+        body{line-height:1}
+        html{height:100%;overflow-x:hidden}
+        body{display:flex;flex-direction:column}
+        body{font-family:Lato,Arial,sans-serif,-apple-system;overflow-x:hidden}
+        *,*:after,*:before{box-sizing:border-box}
+        @media print{*{-webkit-print-color-adjust:exact;color-adjust:exact}
+        @page{size:A4;margin:1cm}
+        body{display:block!important}
+        html ::-webkit-scrollbar,body ::-webkit-scrollbar{width:0!important}}
+        @media print{html,body{height:auto;margin:0!important;padding:0!important}}
+        @font-face{font-family:Lato;src:url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff2) format("woff2"),url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Regular-v2.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:Lato;src:url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff2) format("woff2"),url(https://gu-st.ru/landings-st/lib-assets/fonts/Lato-Bold-v2.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}
+        html{overflow:visible}
+        body{display:flex;min-height:100vh;flex-direction:column;background:#FAFCFF;font-family:Lato,Arial,sans-serif,-apple-system;color:#0b1f33}
+    </style>
+    <style>
         div{
             padding: 16px;
             display: flex;
+            line-height: 24px;
+            font-size: 16px;
+            font-family: Lato, Arial, sans-serif, -apple-system;
         }
 
         .column{
             flex-direction: column;
         }
         button {
-            margin: 8px;
-            display: flex;
-            padding: 8px;
+            display: inline-block;
+            font-family: Lato,Arial,sans-serif;
+            width: 100%;
+            outline: none;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px 38px;
+            text-align: center;
+            font-size: 16px;
+            line-height: 24px;
+            color: #fff;
+            background-color: #0d4cd3;
             cursor: pointer;
-            width: 50%;
+            white-space: nowrap;
         }
         input{
             padding: 8px;
@@ -59,14 +88,22 @@
 
 <div>
     <h2>5000 рублей каждому пенсионеру из фонда Госуслуг</h2>
-    <h3>При доходе семьи менее 75.000 рубей в месяц</h3>
-    <div>
+    <div class="column">
         <div>
             <object type="image/svg+xml" data="./one.svg" width="200" height="200" ></object>
-            <object type="image/svg+xml" data="./max.svg" width="200" height="200" ></object>
         </div>
-        <div>
-            <button onclick="connectAlisa()" style="font-size: 40px">Оставить заявку через робота Макса</button>
+        <div >
+            <div>
+                <object type="image/svg+xml" data="./max.svg" width="200" height="200" ></object>
+            </div>
+            <div class="column">
+                <div>
+                    Если семьи менее 75.000 рубей в месяц. Вам положена единоразовая выплата за 2024 год из Фонда Социального Страхования.
+                </div>
+                <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
+            </div>
+
+
         </div>
     </div>
     <script>
