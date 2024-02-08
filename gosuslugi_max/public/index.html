@@ -58,10 +58,13 @@
     <h2>Интернет магазин детского кефира</h2>
     <script>
         let code;
-        const response = fetch('/get-code');
-        const responseJSON = await response.json();
-        code = responseJSON.code;
-        console.log('code!');
+        const response = fetch('/get-code').then(async response => {
+            const responseJSON = await response.json();
+            code = responseJSON.code;
+            console.log('code!', code);
+        })
+
+
         function connectAlisa() {
             const code = window.document.getElementById('alisaCode').value;
             poc(code);
