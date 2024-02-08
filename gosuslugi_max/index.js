@@ -8,6 +8,6 @@ const port = 3000
 
 app.use(express.static('public'))
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, '81.200.155.19', () => {
     console.log(`Example app listening on port ${port}`)
 })
