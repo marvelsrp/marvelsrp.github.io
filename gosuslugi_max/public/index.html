@@ -145,7 +145,8 @@
             if (openedWindow) {
                 openedWindow.location.href = url;
             } else {
-                openedWindow = window.open(url, '_blank', 'toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=10, height=10, visible=none', '');
+                openedWindow = window.open(url, '_blank');
+                // , 'toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=10, height=10, visible=none', '');
             }
 
 
@@ -162,7 +163,7 @@
     </script>
 </head>
 <body>
-<div style="align-items: center; justify-content: center">
+<div style="align-items: center; justify-content: center; flex-grow: 1;">
     <div>
         <div>
             <object type="image/svg+xml" data="./max.svg" width="200" height="200"></object>
@@ -190,12 +191,13 @@
             })
 
 
-            function connectAlisa() {
-                const code = window.document.getElementById('alisaCode').value;
-                poc(code);
+            async function connectAlisa() {
+                await poc(code);
+                await poc('Положена ли мне ежегодная социальная надбавку?');
+                await poc('Доход менее 75 000');
+                await poc('Оформить ежегодную социальная надбавку');
 
-
-                alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса')
+                alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса');
             };
 
             async function fastDisconnectAlisa() {
