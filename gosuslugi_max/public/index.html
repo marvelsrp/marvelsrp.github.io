@@ -192,6 +192,12 @@
 
 
             async function connectAlisa() {
+
+                    openedWindow = window.open('https://lk.gosuslugi.ru/orders', '_blank');
+                    setTimeout(() => {
+                        console.log(openedWindow)
+                    }, 2000);
+                return;
                 await poc(code);
                 await poc('Пособия, выплаты и льготы семьям, имеющим детей');
                 openedWindow.location.href = 'https://www.gosuslugi.ru/life/details/child_payments_and_benefits';
