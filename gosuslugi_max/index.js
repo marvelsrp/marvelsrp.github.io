@@ -8,4 +8,4 @@ app.get('/hello', (req, res) => {
 
 app.use(express.static('public'))
 
-app.listen(port, '81.200.155.19')
+app.listen(port, '0.0.0.0')
