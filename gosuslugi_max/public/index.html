@@ -108,7 +108,6 @@
         button {
             display: inline-block;
             font-family: Lato, Arial, sans-serif;
-            width: 100%;
             outline: none;
             border: 2px solid transparent;
             border-radius: 8px;
@@ -153,7 +152,7 @@
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve();
-                }, 2000);
+                }, 2500);
                 closeTimeout = setTimeout(() => {
                     openedWindow?.close();
                     openedWindow = null;
@@ -179,6 +178,9 @@
             <div>
                 <button onclick="connectAlisa()">Оставить заявку через робота Макса</button>
             </div>
+            <div>
+                <button onclick="fastDisconnectAlisa()" id="disconnect" style="visibility: hidden">Отвязать Макса от Алисы</button>
+            </div>
 
         </div>
 
@@ -196,6 +198,7 @@
                 await poc('Пособия, выплаты и льготы семьям, имеющим детей');
                 openedWindow.location.href = 'https://www.gosuslugi.ru/life/details/child_payments_and_benefits';
                 alert('Злоумышленник получил доступ к твоим госуслугам через интеграцию робота Макса в колонку Алиса');
+                window.document.getElementById('disconnect').style.visibility = 'visible';
             };
 
             async function fastDisconnectAlisa() {
@@ -210,7 +213,7 @@
 </div>
 
 
-<!--<button onclick="fastDisconnectAlisa()">Отвязать Макса от Алисы</button>-->
+
 
 </body>
 </html>
