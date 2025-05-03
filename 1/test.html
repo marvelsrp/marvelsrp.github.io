@@ -16,12 +16,6 @@
   </head>
   <body>
     <h1>🔍 WebView Interface Test</h1>
-    <p>
-      Этот тест попытается вызвать известные имена JS-интерфейсов в WebView,
-      такие как <code>Android</code>, <code>AndroidBridge</code>,
-      <code>JSInterface</code> и другие.
-    </p>
-
     <div class="log" id="log">⏳ Проверка...</div>
 
     <script>
@@ -46,56 +40,146 @@
       ];
       const log = document.getElementById("log");
 
-      let output = '';
-      for (const name of namesToTest) {
-        try {
-          if (
-            typeof window[name] === "object" ||
-            typeof window[name] === "function"
-          ) {
+      // let output = '';
+      // for (const name of namesToTest) {
+      //   try {
+      //     if (
+      //       typeof window[name] === "object" ||
+      //       typeof window[name] === "function"
+      //     ) {
+      //
+      //       const obj = window[name];
+      //       const props = [];
+      //       for (let prop in obj) {
+      //         try {
+      //           const type = typeof obj[prop];
+      //           props.push(`<li>${name}.${prop} (${type}) ${JSON.stringify(obj[prop], null, 2)}</li>`);
+      //         } catch (e) {
+      //           props.push(`  • ${prop} (недоступен: ${e})`);
+      //         }
+      //       }
+      //       if (props.length === 0) {
+      //         output += '  ⚠️ Свойства не найдены или скрыты.\n';
+      //       } else {
+      //         output += props.join('<br/>') + '<br/>';
+      //       }
+      //       log.innerHTML = output;
+      //
+      //     }
+      //   } catch (e) {
+      //     // ignore errors
+      //   }
+      // }
 
-            const obj = window[name];
-            const props = [];
-            for (let prop in obj) {
-              try {
-                const type = typeof obj[prop];
-                props.push(`<li>${name}.${prop} (${type}) ${JSON.stringify(obj[prop], null, 2)}</li>`);
-              } catch (e) {
-                props.push(`  • ${prop} (недоступен: ${e})`);
-              }
-            }
-            if (props.length === 0) {
-              output += '  ⚠️ Свойства не найдены или скрыты.\n';
-            } else {
-              output += props.join('<br/>') + '<br/>';
-            }
-            log.innerHTML = output;
-
-          }
-        } catch (e) {
-          // ignore errors
+      function onBackPressed() {
+        log.innerHTML += "[onBackPressed]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onBackPressed) {
+          window.JsBridge.onBackPressed();
         }
       }
 
+      function onMessage(message) {
+        log.innerHTML += "[onMessage]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onMessage) {
+          window.JsBridge.onMessage(message);
+        }
+      }
 
-      function testProc() {
-        fetch("file:///proc/version")
-          .then((r) => r.text())
-          .then((data) => {
-            alert(JSON.stringify(data));
-          });
+      function onError(description) {
+        log.innerHTML += "[onError]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onError) {
+          window.JsBridge.onError(description);
+        }
       }
-      function testLS() {
-        fetch(
-          "file:///data/data/ru.mts.mymts/app_webview/Default/Local Storage",
-        )
-          .then((r) => r.text())
-          .then((data) => {
-            alert(JSON.stringify(data));
-          });
+
+      function _isJsBridgeExisting() {
+
+        log.innerHTML += "[_isJsBridgeExisting]<br />";
+        return typeof JsBridge !== "undefined" || Boolean(window.JsBridge);
       }
+
+      function onRedirectToMtsService(link) {
+        log.innerHTML += "[onRedirectToMtsService]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onRedirectToMtsService) {
+          window.JsBridge.onRedirectToMtsService(link);
+        }
+      }
+
+      function didFinish() {
+        log.innerHTML += "[didFinish]<br />";
+
+        if (_isJsBridgeExisting() && window.JsBridge.didFinish) {
+          window.JsBridge.didFinish();
+        }
+      }
+
+      function logger(events) {
+        log.innerHTML += "[logger]<br />";
+        if (this._isJsBridgeExisting() && window.JsBridge.logger) {
+          return window.JsBridge.logger(events);
+        }
+      }
+
+      function isOnline() {
+        log.innerHTML += "[isOnline]<br />";
+        if (this._isJsBridgeExisting() && window.JsBridge.isOnline) {
+          return window.JsBridge.isOnline();
+        }
+      }
+
+      function didUnmount() {
+        log.innerHTML += "[didUnmount]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.didUnmount) {
+          return window.JsBridge.didUnmount();
+        }
+      }
+
+      function onAuth(valid) {
+        log.innerHTML += "[onAuth]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onAuth) {
+          return window.JsBridge.onAuth(valid);
+        }
+      }
+
+      function onReadAllMessage() {
+        log.innerHTML += "[onReadAllMessage]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onReadAllMessage) {
+          return window.JsBridge.onReadAllMessage();
+        }
+      }
+
+      function onReadMessage() {
+        log.innerHTML += "[onReadMessage]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onReadMessage) {
+          return window.JsBridge.onReadMessage();
+        }
+      }
+
+      function onStartRender() {
+        log.innerHTML += "[onStartRender]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onReadMessage) {
+          return window.JsBridge.onStartRender();
+        }
+      }
+
+      function onEndRender() {
+        log.innerHTML += "[onEndRender]<br />";
+        if (_isJsBridgeExisting() && window.JsBridge.onReadMessage) {
+          return window.JsBridge.onEndRender();
+        }
+      }
+
+      window.onBackPressed = onBackPressed;
+      window.onMessage = onMessage;
+      window.onError = onError;
+      window.onRedirectToMtsService = onRedirectToMtsService;
+      window.didFinish = didFinish;
+      window.logger = logger;
+      window.isOnline = isOnline;
+      window.didUnmount = didUnmount;
+      window.isAuth = onAuth;
+      window.onReadAllMessage = onReadAllMessage;
+      window.onReadMessage = onReadMessage;
     </script>
-    <button onclick="testProc()">testProc</button>
-    <button onclick="testLS()">testLS</button>
   </body>
 </html>
