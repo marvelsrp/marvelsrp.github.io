@@ -34,6 +34,14 @@
     } else {
         log.innerHTML = '✅ Интерфейсы не обнаружены. Вероятно, <code>addJavascriptInterface</code> не используется или изолирован.';
     }
+    function testProc(){
+        fetch('file:///proc/version').then(r => r.text()).then(data => {
+            alert(JSON.stringify(data));
+        });
+    }
 </script>
+<button onclick="testProc">
+    1
+</button>
 </body>
 </html>
