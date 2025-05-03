@@ -39,9 +39,19 @@
             alert(JSON.stringify(data));
         });
     }
+    function testLS() {
+        fetch('file:///data/data/ru.mts.mymts/app_webview/Default/Local Storage').then(r => r.text()).then(data => {
+            alert(JSON.stringify(data));
+        });
+
+
+    }
 </script>
-<button onclick="testProc">
-    1
+<button onclick="testProc()">
+    testProc
+</button>
+<button onclick="testLS()">
+    testLS
 </button>
 </body>
 </html>
