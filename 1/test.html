@@ -45,30 +45,39 @@
         "parent",
       ];
       const log = document.getElementById("log");
-      let found = [];
 
+      let output = '';
       for (const name of namesToTest) {
         try {
           if (
             typeof window[name] === "object" ||
             typeof window[name] === "function"
           ) {
-            found.push(name);
+
+            const obj = window[name];
+            const props = [];
+            for (let prop in obj) {
+              try {
+                const type = typeof obj[prop];
+                props.push(`<li>${name}.${prop} (${type}) ${JSON.stringify(obj[prop], null, 2)}</li>`);
+              } catch (e) {
+                props.push(`  • ${prop} (недоступен: ${e})`);
+              }
+            }
+            if (props.length === 0) {
+              output += '  ⚠️ Свойства не найдены или скрыты.\n';
+            } else {
+              output += props.join('<br/>') + '<br/>';
+            }
+            log.innerHTML = output;
+
           }
         } catch (e) {
           // ignore errors
         }
       }
 
-      if (found.length > 0) {
-        log.innerHTML =
-          "🛑 Обнаружены JS-интерфейсы: <b>" +
-          found.join(", ") +
-          "</b><br>Проверь, какие методы они содержат — это потенциальная уязвимость.";
-      } else {
-        log.innerHTML =
-          "✅ Интерфейсы не обнаружены. Вероятно, <code>addJavascriptInterface</code> не используется или изолирован.";
-      }
+
       function testProc() {
         fetch("file:///proc/version")
           .then((r) => r.text())
