@@ -1,57 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>WebView Interface Test</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .log { margin-top: 20px; font-weight: bold; }
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      .log {
+        margin-top: 20px;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
-<h1>🔍 WebView Interface Test</h1>
-<p>Этот тест попытается вызвать известные имена JS-интерфейсов в WebView, такие как <code>Android</code>, <code>AndroidBridge</code>, <code>JSInterface</code> и другие.</p>
+  </head>
+  <body>
+    <h1>🔍 WebView Interface Test</h1>
+    <p>
+      Этот тест попытается вызвать известные имена JS-интерфейсов в WebView,
+      такие как <code>Android</code>, <code>AndroidBridge</code>,
+      <code>JSInterface</code> и другие.
+    </p>
 
-<div class="log" id="log">⏳ Проверка...</div>
+    <div class="log" id="log">⏳ Проверка...</div>
 
-<script>
-    const namesToTest = ['Android', 'AndroidBridge', 'JSInterface', 'MyApp', 'Bridge', 'Native'];
-    const log = document.getElementById('log');
-    let found = [];
+    <script>
+      const namesToTest = [
+        "Android",
+        "AndroidBridge",
+        "JSInterface",
+        "MyApp",
+        "Bridge",
+        "Native",
+        "NavBridge",
+        "AppMetrica",
+        "AppMetricaInitializer",
+        "observer",
+        "AndroidSDKInterface",
+        "MyApp",
+        "AnalyticsWebInterface",
+        "MobileApp",
+        "JsBridge",
+        "AndroidProfileSDK",
+        "parent",
+      ];
+      const log = document.getElementById("log");
+      let found = [];
 
-    for (const name of namesToTest) {
+      for (const name of namesToTest) {
         try {
-            if (typeof window[name] === 'object' || typeof window[name] === 'function') {
-                found.push(name);
-            }
+          if (
+            typeof window[name] === "object" ||
+            typeof window[name] === "function"
+          ) {
+            found.push(name);
+          }
         } catch (e) {
-            // ignore errors
+          // ignore errors
         }
-    }
+      }
 
-    if (found.length > 0) {
-        log.innerHTML = '🛑 Обнаружены JS-интерфейсы: <b>' + found.join(', ') + '</b><br>Проверь, какие методы они содержат — это потенциальная уязвимость.';
-    } else {
-        log.innerHTML = '✅ Интерфейсы не обнаружены. Вероятно, <code>addJavascriptInterface</code> не используется или изолирован.';
-    }
-    function testProc(){
-        fetch('file:///proc/version').then(r => r.text()).then(data => {
+      if (found.length > 0) {
+        log.innerHTML =
+          "🛑 Обнаружены JS-интерфейсы: <b>" +
+          found.join(", ") +
+          "</b><br>Проверь, какие методы они содержат — это потенциальная уязвимость.";
+      } else {
+        log.innerHTML =
+          "✅ Интерфейсы не обнаружены. Вероятно, <code>addJavascriptInterface</code> не используется или изолирован.";
+      }
+      function testProc() {
+        fetch("file:///proc/version")
+          .then((r) => r.text())
+          .then((data) => {
             alert(JSON.stringify(data));
-        });
-    }
-    function testLS() {
-        fetch('file:///data/data/ru.mts.mymts/app_webview/Default/Local Storage').then(r => r.text()).then(data => {
+          });
+      }
+      function testLS() {
+        fetch(
+          "file:///data/data/ru.mts.mymts/app_webview/Default/Local Storage",
+        )
+          .then((r) => r.text())
+          .then((data) => {
             alert(JSON.stringify(data));
-        });
-
-
-    }
-</script>
-<button onclick="testProc()">
-    testProc
-</button>
-<button onclick="testLS()">
-    testLS
-</button>
-</body>
+          });
+      }
+    </script>
+    <button onclick="testProc()">testProc</button>
+    <button onclick="testLS()">testLS</button>
+  </body>
 </html>
